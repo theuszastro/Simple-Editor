@@ -1,8 +1,17 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import { BsFonts, BsFillImageFill, BsLink, BsTypeBold } from 'react-icons/bs';
 import { BiFontColor, BiStrikethrough, BiUnderline, BiItalic } from 'react-icons/bi';
-import { AiOutlineFontSize, AiFillYoutube, AiOutlineClose } from 'react-icons/ai';
+import {
+	AiOutlineFontSize,
+	AiFillYoutube,
+	AiOutlineClose,
+	AiOutlineUnorderedList,
+	AiOutlineOrderedList,
+	AiOutlineAlignLeft,
+	AiOutlineAlignCenter,
+	AiOutlineAlignRight,
+} from 'react-icons/ai';
 
 export const Container = styled.div`
 	width: 100vw;
@@ -15,7 +24,7 @@ export const Container = styled.div`
 `;
 
 export const Editor = styled.div`
-	width: 81rem;
+	width: 90rem;
 	height: 35rem;
 
 	border: 1px solid #ccc;
@@ -24,7 +33,7 @@ export const Editor = styled.div`
 `;
 
 export const EditorActions = styled.div`
-	width: 80rem;
+	width: 89rem;
 	height: 5rem;
 
 	display: flex;
@@ -62,16 +71,20 @@ export const Action = styled.div`
 `;
 
 export const Separator = styled.div`
-	width: 0.2rem;
-	height: 3rem;
+	display: flex;
+	align-items: center;
 
-	background-color: #ccc;
+	height: 4rem;
 
-	margin: 1rem 0.5rem;
+	& + & {
+		border-left: 0.2rem solid #ccc;
+
+		padding: 0 0.5rem;
+	}
 `;
 
 export const TextArea = styled.iframe`
-	width: 81rem;
+	width: 90rem;
 	height: 30rem;
 
 	border: 0;
@@ -266,6 +279,16 @@ export const Add = styled.button`
 		opacity: 1;
 	}
 `;
+
+export const AlignLeft = styled(AiOutlineAlignLeft)``;
+
+export const AlignCenter = styled(AiOutlineAlignCenter)``;
+
+export const AlignRight = styled(AiOutlineAlignRight)``;
+
+export const NoOrdened = styled(AiOutlineUnorderedList)``;
+
+export const Ordened = styled(AiOutlineOrderedList)``;
 
 export const Close = styled(AiOutlineClose)`
 	cursor: pointer;

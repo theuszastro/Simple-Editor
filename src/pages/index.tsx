@@ -34,6 +34,11 @@ import {
 	Label,
 	WrapperTamanho,
 	WrapperInput,
+	NoOrdened,
+	Ordened,
+	AlignLeft,
+	AlignCenter,
+	AlignRight,
 } from '../styles/Home';
 
 const Home: React.FC = () => {
@@ -43,30 +48,30 @@ const Home: React.FC = () => {
 	const [ItalicActive, setItalicActive] = useState(false);
 	const [UnderlineActive, setUnderlineActive] = useState(false);
 	const [StrikeActive, setStrikeActive] = useState(false);
-
 	const [ImageActive, setImageActive] = useState(false);
 	const [YoutubeActive, setYoutubeActive] = useState(false);
 	const [LinkActive, setLinkActive] = useState(false);
-
 	const [FontActive, setFontActive] = useState(false);
-	const [FontValue, setFontValue] = useState('');
-
 	const [FontSizeActive, setFontSizeActive] = useState(false);
-	const [FontSizeValue, setFontSizeValue] = useState(0);
-
 	const [FontColorActive, setFontColorActive] = useState(false);
-	const [FontColorValue, setFontColorValue] = useState('');
+	const [NoOrdenedActive, setNoOrdenedActive] = useState(false);
+	const [OrdenedActive, setOrdenedActive] = useState(false);
+	const [LeftActive, setLeftActive] = useState(true);
+	const [CenterActive, setCenterActive] = useState(false);
+	const [RightActive, setRightActive] = useState(false);
 
+	const [FontValue, setFontValue] = useState('');
+	const [FontColorValue, setFontColorValue] = useState('');
 	const [ImageLinkValue, setImageLinkValue] = useState('');
 	const [WidthImage, setWidthImage] = useState('');
 	const [HeightImage, setHeightImage] = useState('');
-
 	const [VideoLink, setVideoLink] = useState('');
 	const [WidthVideo, setWidthVideo] = useState('');
 	const [HeightVideo, setHeightVideo] = useState('');
-
 	const [HrefLink, setHrefLink] = useState('');
 	const [LabelLink, setLabelLink] = useState('');
+
+	const [FontSizeValue, setFontSizeValue] = useState(0);
 
 	var iframeDocument: Document;
 
@@ -117,69 +122,137 @@ const Home: React.FC = () => {
 			<Container>
 				<Editor>
 					<EditorActions>
-						<Action
-							className={BoldActive ? 'active' : ''}
-							onClick={() => ActionsEditor.TextBold(iframeDocument, BoldActive, setBoldActive)}
-						>
-							<Bold size={22.5} />
-						</Action>
+						<Separator>
+							<Action
+								className={BoldActive ? 'active' : ''}
+								onClick={() => ActionsEditor.TextBold(iframeDocument, BoldActive, setBoldActive)}
+							>
+								<Bold size={22.5} />
+							</Action>
 
-						<Action
-							className={ItalicActive ? 'active' : ''}
-							onClick={() => ActionsEditor.TextItalic(iframeDocument, ItalicActive, setItalicActive)}
-						>
-							<Italic size={22.5} />
-						</Action>
+							<Action
+								className={ItalicActive ? 'active' : ''}
+								onClick={() => ActionsEditor.TextItalic(iframeDocument, ItalicActive, setItalicActive)}
+							>
+								<Italic size={22.5} />
+							</Action>
 
-						<Action
-							className={UnderlineActive ? 'active' : ''}
-							onClick={() =>
-								ActionsEditor.TextUnderline(iframeDocument, UnderlineActive, setUnderlineActive)
-							}
-						>
-							<Underline size={22.5} />
-						</Action>
+							<Action
+								className={UnderlineActive ? 'active' : ''}
+								onClick={() =>
+									ActionsEditor.TextUnderline(iframeDocument, UnderlineActive, setUnderlineActive)
+								}
+							>
+								<Underline size={22.5} />
+							</Action>
 
-						<Action
-							className={StrikeActive ? 'active' : ''}
-							onClick={() => ActionsEditor.TextStrike(iframeDocument, StrikeActive, setStrikeActive)}
-						>
-							<StrikeThroungh size={22.5} />
-						</Action>
+							<Action
+								className={StrikeActive ? 'active' : ''}
+								onClick={() => ActionsEditor.TextStrike(iframeDocument, StrikeActive, setStrikeActive)}
+							>
+								<StrikeThroungh size={22.5} />
+							</Action>
+						</Separator>
 
-						<Separator />
+						<Separator>
+							<Action
+								className={NoOrdenedActive ? 'active' : ''}
+								onClick={() => {
+									OrdenedActive && setOrdenedActive(false);
 
-						<Action className={LinkActive ? 'active' : ''} onClick={() => setLinkActive(true)}>
-							<Link size={22.5} />
-						</Action>
+									ActionsEditor.InsertListNoOrdenada(
+										iframeDocument,
+										NoOrdenedActive,
+										setNoOrdenedActive
+									);
+								}}
+							>
+								<NoOrdened size={22.5} />
+							</Action>
 
-						<Action className={YoutubeActive ? 'active' : ''} onClick={() => setYoutubeActive(true)}>
-							<Youtube size={22.5} />
-						</Action>
+							<Action
+								className={OrdenedActive ? 'active' : ''}
+								onClick={() => {
+									NoOrdenedActive && setNoOrdenedActive(false);
 
-						<Action className={ImageActive ? 'active' : ''} onClick={() => setImageActive(true)}>
-							<Image size={22.5} />
-						</Action>
+									ActionsEditor.InsertListOrdenada(iframeDocument, OrdenedActive, setOrdenedActive);
+								}}
+							>
+								<Ordened size={22.5} />
+							</Action>
+						</Separator>
 
-						{/* <Separator />
+						<Separator>
+							<Action
+								className={LeftActive ? 'active' : ''}
+								onClick={() => {
+									CenterActive && setCenterActive(false);
+									RightActive && setRightActive(false);
 
-						<Action className={FontActive ? 'active' : ''} onClick={() => setFontActive(!FontActive)}>
-							<Font size={22.5} />
-						</Action>
+									ActionsEditor.InsertCursorLeft(iframeDocument, LeftActive, setLeftActive);
+								}}
+							>
+								<AlignLeft size={22.5} />
+							</Action>
 
-						<Action
-							className={FontSizeActive ? 'active' : ''}
-							onClick={() => setFontSizeActive(!FontSizeActive)}
-						>
-							<FontSize size={22.5} />
-						</Action>
+							<Action
+								className={CenterActive ? 'active' : ''}
+								onClick={() => {
+									RightActive && setRightActive(false);
+									LeftActive && setLeftActive(false);
 
-						<Action
-							className={FontColorActive ? 'active' : ''}
-							onClick={() => setFontColorActive(!FontColorActive)}
-						>
-							<FontColor size={22.5} />
-						</Action> */}
+									ActionsEditor.InsertCursorCenter(iframeDocument, CenterActive, setCenterActive);
+								}}
+							>
+								<AlignCenter size={22.5} />
+							</Action>
+
+							<Action
+								className={RightActive ? 'active' : ''}
+								onClick={() => {
+									LeftActive && setLeftActive(false);
+									CenterActive && setCenterActive(false);
+
+									ActionsEditor.InsertCursorRight(iframeDocument, RightActive, setRightActive);
+								}}
+							>
+								<AlignRight size={22.5} />
+							</Action>
+						</Separator>
+
+						<Separator>
+							<Action className={LinkActive ? 'active' : ''} onClick={() => setLinkActive(true)}>
+								<Link size={22.5} />
+							</Action>
+
+							<Action className={YoutubeActive ? 'active' : ''} onClick={() => setYoutubeActive(true)}>
+								<Youtube size={22.5} />
+							</Action>
+
+							<Action className={ImageActive ? 'active' : ''} onClick={() => setImageActive(true)}>
+								<Image size={19} />
+							</Action>
+						</Separator>
+
+						{/* <Separator>
+							<Action
+								className={FontColorActive ? 'active' : ''}
+								onClick={() => setFontColorActive(!FontColorActive)}
+							>
+								<FontColor size={22.5} />
+							</Action>
+
+							<Action className={FontActive ? 'active' : ''} onClick={() => setFontActive(!FontActive)}>
+								<Font size={22.5} />
+							</Action>
+
+							<Action
+								className={FontSizeActive ? 'active' : ''}
+								onClick={() => setFontSizeActive(!FontSizeActive)}
+							>
+								<FontSize size={22.5} />
+							</Action>
+						</Separator> */}
 					</EditorActions>
 
 					<TextArea ref={iframe} contentEditable></TextArea>
