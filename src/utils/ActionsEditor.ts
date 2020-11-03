@@ -116,6 +116,18 @@ class ActionsEditor {
 
 		document.body.focus();
 	}
+
+	ChangeColor(document: Document, state: boolean, setState: any, color: string) {
+		document.execCommand('foreColor', true, color);
+
+		setState(!state);
+
+		document.body.focus();
+	}
+
+	ChangeFont(document: Document, state: boolean, setState: any, font: string) {} //  fontName
+
+	ChangeFontSize(document: Document, state: boolean, setState: any, fontSize: string) {} // fontSize
 }
 
 export default new ActionsEditor();

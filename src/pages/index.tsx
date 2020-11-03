@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef, BaseSyntheticEvent } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import ActionsEditor from '../utils/ActionsEditor';
+
+import Popup from '../utils/components/popup';
 
 import {
 	Container,
@@ -15,30 +17,20 @@ import {
 	Link,
 	Image,
 	Youtube,
-	Font,
-	FontSize,
-	FontColor,
 	TextArea,
-	Wrapper,
-	Content,
-	Header,
-	HeaderLabel,
-	Close,
-	Main,
-	InsertLink,
-	Tamanho,
-	Width,
-	Height,
-	Footer,
-	Add,
-	Label,
-	WrapperTamanho,
-	WrapperInput,
 	NoOrdened,
 	Ordened,
 	AlignLeft,
 	AlignCenter,
 	AlignRight,
+	AlignFull,
+	Font,
+	FontSize,
+	FontColor,
+	Colors,
+	GridColors,
+	Color,
+	Indicador,
 } from '../styles/Home';
 
 const Home: React.FC = () => {
@@ -48,70 +40,60 @@ const Home: React.FC = () => {
 	const [ItalicActive, setItalicActive] = useState(false);
 	const [UnderlineActive, setUnderlineActive] = useState(false);
 	const [StrikeActive, setStrikeActive] = useState(false);
-	const [ImageActive, setImageActive] = useState(false);
-	const [YoutubeActive, setYoutubeActive] = useState(false);
-	const [LinkActive, setLinkActive] = useState(false);
-	const [FontActive, setFontActive] = useState(false);
-	const [FontSizeActive, setFontSizeActive] = useState(false);
-	const [FontColorActive, setFontColorActive] = useState(false);
+
 	const [NoOrdenedActive, setNoOrdenedActive] = useState(false);
 	const [OrdenedActive, setOrdenedActive] = useState(false);
+
 	const [LeftActive, setLeftActive] = useState(true);
 	const [CenterActive, setCenterActive] = useState(false);
 	const [RightActive, setRightActive] = useState(false);
+	const [FullActive, setFullActive] = useState(false);
 
-	const [FontValue, setFontValue] = useState('');
-	const [FontColorValue, setFontColorValue] = useState('');
-	const [ImageLinkValue, setImageLinkValue] = useState('');
+	const [FontActive, setFontActive] = useState(false);
+	const [FontSizeActive, setFontSizeActive] = useState(false);
+
+	const [FontColorActive, setFontColorActive] = useState(false);
+	const [ColorValue, setColorValue] = useState('');
+	const [ColorBorder, setColorBorder] = useState('');
+
+	const [ImageActive, setImageActive] = useState(false);
+	const [ImageLink, setImageLink] = useState('');
 	const [WidthImage, setWidthImage] = useState('');
 	const [HeightImage, setHeightImage] = useState('');
+
+	const [YoutubeActive, setYoutubeActive] = useState(false);
 	const [VideoLink, setVideoLink] = useState('');
 	const [WidthVideo, setWidthVideo] = useState('');
 	const [HeightVideo, setHeightVideo] = useState('');
+
+	const [LinkActive, setLinkActive] = useState(false);
 	const [HrefLink, setHrefLink] = useState('');
 	const [LabelLink, setLabelLink] = useState('');
 
-	const [FontSizeValue, setFontSizeValue] = useState(0);
+	const [Cores] = useState([
+		'#000000',
+		'#1E90FF',
+		'#008000',
+		'#00CED1',
+		'#FFA500',
+		'#FF0000',
+		'#FFFF00',
+		'#006400',
+		'#ADD8E6',
+		'#4682B4',
+		'#7B68EE',
+		'#9400D3',
+	]);
 
 	var iframeDocument: Document;
 
-	const CloseInsert = (e: BaseSyntheticEvent, type: string, popup?: string) => {
-		switch (type) {
-			case 'Image':
-				const InsertImage = document.querySelector('#InsertImage')!;
-				if (InsertImage.contains(e.target)) return;
-
-				setImageActive(false);
-				break;
-
-			case 'Video':
-				const InsertVideo = document.querySelector('#InsertVideo')!;
-				if (InsertVideo.contains(e.target)) return;
-
-				setYoutubeActive(false);
-				break;
-
-			case 'Link':
-				const InsertLink = document.querySelector('#InsertLink')!;
-				if (InsertLink.contains(e.target)) return;
-
-				setLinkActive(false);
-				break;
-
-			case 'Fechar':
-				if (popup === 'Image') setImageActive(false);
-				if (popup === 'Video') setYoutubeActive(false);
-				if (popup === 'Link') setLinkActive(false);
-
-				break;
-		}
-	};
+	useEffect(() => {}, []);
 
 	useEffect(() => {
 		// @ts-ignore
 		iframeDocument = iframe.current.contentWindow.document;
-		iframeDocument.body.style.margin = '10px 20px';
 
+		iframeDocument.body.style.margin = '10px 20px';
 		iframeDocument.designMode = 'on';
 
 		document.addEventListener('keydown', () => {});
@@ -188,6 +170,7 @@ const Home: React.FC = () => {
 								onClick={() => {
 									CenterActive && setCenterActive(false);
 									RightActive && setRightActive(false);
+									FullActive && setFullActive(false);
 
 									ActionsEditor.InsertCursorLeft(iframeDocument, LeftActive, setLeftActive);
 								}}
@@ -198,8 +181,9 @@ const Home: React.FC = () => {
 							<Action
 								className={CenterActive ? 'active' : ''}
 								onClick={() => {
-									RightActive && setRightActive(false);
 									LeftActive && setLeftActive(false);
+									RightActive && setRightActive(false);
+									FullActive && setFullActive(false);
 
 									ActionsEditor.InsertCursorCenter(iframeDocument, CenterActive, setCenterActive);
 								}}
@@ -212,11 +196,25 @@ const Home: React.FC = () => {
 								onClick={() => {
 									LeftActive && setLeftActive(false);
 									CenterActive && setCenterActive(false);
+									FullActive && setFullActive(false);
 
 									ActionsEditor.InsertCursorRight(iframeDocument, RightActive, setRightActive);
 								}}
 							>
 								<AlignRight size={22.5} />
+							</Action>
+
+							<Action
+								className={FullActive ? 'active' : ''}
+								onClick={() => {
+									LeftActive && setLeftActive(false);
+									CenterActive && setCenterActive(false);
+									RightActive && setRightActive(false);
+
+									ActionsEditor.InsertCursorFull(iframeDocument, FullActive, setFullActive);
+								}}
+							>
+								<AlignFull size={22.5} />
 							</Action>
 						</Separator>
 
@@ -234,12 +232,37 @@ const Home: React.FC = () => {
 							</Action>
 						</Separator>
 
-						{/* <Separator>
+						<Separator>
 							<Action
 								className={FontColorActive ? 'active' : ''}
 								onClick={() => setFontColorActive(!FontColorActive)}
 							>
 								<FontColor size={22.5} />
+
+								{FontColorActive && (
+									<Colors id="colors">
+										<Indicador />
+
+										<GridColors>
+											{Cores.map(item => (
+												<Color
+													cor={item}
+													onClick={() => {
+														setColorValue(item);
+														setColorBorder(item);
+
+														ActionsEditor.ChangeColor(
+															iframeDocument,
+															FontColorActive,
+															setFontColorActive,
+															item
+														);
+													}}
+												/>
+											))}
+										</GridColors>
+									</Colors>
+								)}
 							</Action>
 
 							<Action className={FontActive ? 'active' : ''} onClick={() => setFontActive(!FontActive)}>
@@ -252,209 +275,57 @@ const Home: React.FC = () => {
 							>
 								<FontSize size={22.5} />
 							</Action>
-						</Separator> */}
+						</Separator>
 					</EditorActions>
 
 					<TextArea ref={iframe} contentEditable></TextArea>
 				</Editor>
 			</Container>
 
-			{ImageActive && (
-				<Wrapper onClick={e => CloseInsert(e, 'Image')}>
-					<Content id="InsertImage">
-						<Header>
-							<HeaderLabel>Adicionar imagem</HeaderLabel>
-
-							<Close size={25} onClick={e => CloseInsert(e, 'Fechar', 'Image')} />
-						</Header>
-
-						<Main>
-							<WrapperInput>
-								<Label htmlFor="link">Url</Label>
-								<InsertLink
-									id="link"
-									value={ImageLinkValue}
-									onChange={e => setImageLinkValue(e.target.value)}
-								/>
-							</WrapperInput>
-
-							<Tamanho>
-								<WrapperTamanho>
-									<Label htmlFor="width">Largura</Label>
-									<Width
-										id="width"
-										type="number"
-										value={WidthImage}
-										onChange={e => setWidthImage(e.target.value)}
-									/>
-								</WrapperTamanho>
-
-								<WrapperTamanho>
-									<Label htmlFor="height">Altura</Label>
-									<Height
-										id="height"
-										type="number"
-										value={HeightImage}
-										onChange={e => setHeightImage(e.target.value)}
-									/>
-								</WrapperTamanho>
-							</Tamanho>
-						</Main>
-
-						<Footer>
-							<Add
-								className={HeightImage && WidthImage && ImageLinkValue ? 'active' : ''}
-								onClick={() => {
-									if (HeightImage && WidthImage && ImageLinkValue) {
-										ActionsEditor.InsertImage(
-											iframeDocument,
-											ImageActive,
-											setImageActive,
-											ImageLinkValue,
-											WidthImage,
-											HeightImage
-										);
-
-										setImageLinkValue('');
-										setHeightImage('');
-										setWidthImage('');
-									}
-								}}
-							>
-								Adicionar
-							</Add>
-						</Footer>
-					</Content>
-				</Wrapper>
+			{LinkActive && (
+				<Popup
+					category="link"
+					Active={LinkActive}
+					setActive={setLinkActive}
+					Link={HrefLink}
+					setLink={setHrefLink}
+					short={LabelLink}
+					setShort={setLabelLink}
+					reference={iframe}
+				/>
 			)}
 
 			{YoutubeActive && (
-				<Wrapper onClick={e => CloseInsert(e, 'Video')}>
-					<Content id="InsertVideo">
-						<Header>
-							<HeaderLabel>Adicionar video do youtube</HeaderLabel>
-
-							<Close size={20} onClick={e => CloseInsert(e, 'Fechar', 'Video')} />
-						</Header>
-
-						<Main>
-							<WrapperInput>
-								<Label htmlFor="link">Link do video</Label>
-								<InsertLink id="link" value={VideoLink} onChange={e => setVideoLink(e.target.value)} />
-							</WrapperInput>
-
-							<Tamanho>
-								<WrapperTamanho>
-									<Label htmlFor="width">Largura</Label>
-									<Width
-										id="width"
-										value={WidthVideo}
-										onChange={e => {
-											let value = e.target.value;
-											value = value.replace(/^\D/, '');
-
-											setWidthVideo(value);
-										}}
-									/>
-								</WrapperTamanho>
-
-								<WrapperTamanho>
-									<Label htmlFor="height">Altura</Label>
-									<Height
-										id="height"
-										value={HeightVideo}
-										onChange={e => {
-											let value = e.target.value;
-											value = value.replace(/^\D/, '');
-
-											setHeightVideo(value);
-										}}
-									/>
-								</WrapperTamanho>
-							</Tamanho>
-						</Main>
-
-						<Footer>
-							<Add
-								className={HeightVideo && WidthVideo && VideoLink ? 'active' : ''}
-								onClick={e => {
-									if (HeightVideo && WidthVideo && VideoLink) {
-										ActionsEditor.InsertVideo(
-											iframeDocument,
-											YoutubeActive,
-											setYoutubeActive,
-											VideoLink,
-											WidthVideo,
-											HeightVideo
-										);
-
-										setVideoLink('');
-										setWidthVideo('');
-										setHeightVideo('');
-									}
-								}}
-							>
-								Adicionar
-							</Add>
-						</Footer>
-					</Content>
-				</Wrapper>
+				<Popup
+					category="video"
+					Active={YoutubeActive}
+					setActive={setYoutubeActive}
+					Link={VideoLink}
+					setLink={setVideoLink}
+					width={WidthVideo}
+					setWidth={setWidthVideo}
+					height={HeightVideo}
+					setHeight={setHeightVideo}
+					reference={iframe}
+				/>
 			)}
 
-			{LinkActive && (
-				<Wrapper onClick={e => CloseInsert(e, 'Link')}>
-					<Content id="InsertLink">
-						<Header>
-							<HeaderLabel>Adicionar link</HeaderLabel>
-
-							<Close size={20} onClick={e => CloseInsert(e, 'Fechar', 'Link')} />
-						</Header>
-
-						<Main>
-							<WrapperInput>
-								<Label htmlFor="link">Link</Label>
-								<InsertLink id="link" value={HrefLink} onChange={e => setHrefLink(e.target.value)} />
-							</WrapperInput>
-
-							<WrapperInput>
-								<Label htmlFor="LabelHref">Abreviação</Label>
-								<InsertLink
-									id="LabelHref"
-									value={LabelLink}
-									onChange={e => setLabelLink(e.target.value)}
-								/>
-							</WrapperInput>
-						</Main>
-
-						<Footer>
-							<Add
-								className={HrefLink && LabelLink ? 'active' : ''}
-								onClick={e => {
-									if (HrefLink && LabelLink) {
-										ActionsEditor.InsertLink(
-											iframeDocument,
-											LinkActive,
-											setLinkActive,
-											HrefLink,
-											LabelLink
-										);
-
-										setHrefLink('');
-										setLabelLink('');
-									}
-								}}
-							>
-								Adicionar
-							</Add>
-						</Footer>
-					</Content>
-				</Wrapper>
+			{ImageActive && (
+				<Popup
+					category="image"
+					Active={ImageActive}
+					setActive={setImageActive}
+					Link={ImageLink}
+					setLink={setImageLink}
+					width={WidthImage}
+					setWidth={setWidthImage}
+					height={HeightImage}
+					setHeight={setHeightImage}
+					reference={iframe}
+				/>
 			)}
 		</>
 	);
 };
-// onClick={() => ActionsEditor.InsertImage(ImageLinkValue, WidthImage, HeightImage)}
-// <WrapperVideo></WrapperVideo>
-// <WrapperLink></WrapperLink>
 
 export default Home;
