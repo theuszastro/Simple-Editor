@@ -102,21 +102,21 @@ export const Colors = styled.div`
 	position: absolute;
 	top: 100%;
 
-	width: 12rem;
+	width: 12.5rem;
 	height: 10rem;
-
-	padding: 0.5rem;
 
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
 
-	border-radius: 0.7rem;
-
 	transform: translateY(1.8rem);
 
-	background-color: #51484f;
+	background-color: #fff;
+
+	border-radius: 0.7rem;
+
+	box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.4);
 `;
 
 export const Indicador = styled.div`
@@ -125,25 +125,40 @@ export const Indicador = styled.div`
 
 	position: absolute;
 	top: -1rem;
-	z-index: 2;
+	z-index: 1;
 
 	border-radius: 0.7rem;
 
 	transform: rotate(-45deg);
 
-	background-color: #51484f;
+	background-color: #fff;
+
+	box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.4);
 `;
 
 export const GridColors = styled.div`
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	grid-gap: 1rem;
+
+	width: 10.5rem;
+	height: 8rem;
+
+	padding: 1rem;
+
+	border-radius: 0.7rem;
+
+	background-color: #fff;
+
+	position: relative;
+	z-index: 3;
 `;
 
 export const Color = styled.div<ColorProps>`
-	width: 1.7rem;
-	height: 1.7rem;
+	width: 1.6rem;
+	height: 1.6rem;
 
+	border: 0.1px solid #888;
 	border-radius: 0.5rem;
 
 	cursor: pointer;
@@ -158,6 +173,99 @@ export const Color = styled.div<ColorProps>`
 	&:hover {
 		transform: scale(1.2);
 	}
+`;
+
+export const ChooseFonts = styled.div`
+	background-color: #fff;
+
+	width: 12rem;
+	height: 36rem;
+
+	border-radius: 0.7em;
+
+	position: absolute;
+	top: 100%;
+
+	border-radius: 0.7rem;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.4);
+
+	transform: translateY(1.8rem);
+
+	&.size {
+		height: 28rem;
+	}
+`;
+
+export const Fonts = styled.div`
+	width: 12rem;
+	height: 36rem;
+
+	position: relative;
+	z-index: 3;
+
+	border-radius: 0.7rem;
+
+	background-color: #fff;
+
+	&.size {
+		height: 28rem;
+	}
+`;
+
+export const Choose = styled.div`
+	width: 12rem;
+	height: 4rem;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	cursor: pointer;
+
+	color: #000;
+
+	transition: 400ms;
+
+	&.active {
+		background-color: rgba(0, 0, 0, 0.7);
+
+		color: #fff;
+	}
+
+	&:first-child {
+		border-top-left-radius: 0.7rem;
+		border-top-right-radius: 0.7rem;
+	}
+
+	&:last-child {
+		border-bottom-left-radius: 0.7rem;
+		border-bottom-right-radius: 0.7rem;
+	}
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.7);
+
+		color: #fff;
+	}
+`;
+
+export const FontFamily = styled.p`
+	text-align: center;
+
+	font-size: 13px;
+	font-weight: 400;
+`;
+
+export const SizeFont = styled.p`
+	text-align: center;
+
+	font-size: 1.3rem;
+	font-weight: 400;
 `;
 
 export const AlignLeft = styled(AiOutlineAlignLeft)``;

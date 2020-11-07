@@ -12,7 +12,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 				<link
-					href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Lexend+Deca&family=Montserrat&family=Poppins&family=Work+Sans&display=swap"
+					href="https://fonts.googleapis.com/css2?family=Archivo&family=Josefin+Sans&family=Lexend+Deca&family=Lexend+Exa&family=Montserrat&family=Montserrat+Alternates&family=Poppins&family=Roboto&family=Work+Sans&display=swap"
 					rel="stylesheet"
 				/>
 

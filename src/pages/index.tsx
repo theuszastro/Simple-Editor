@@ -4,6 +4,8 @@ import ActionsEditor from '../utils/ActionsEditor';
 
 import Popup from '../utils/components/popup';
 
+import { CoresOptions, FontsOptions, FontSizeOptions } from '../utils/arrays';
+
 import {
 	Container,
 	Editor,
@@ -31,6 +33,11 @@ import {
 	GridColors,
 	Color,
 	Indicador,
+	ChooseFonts,
+	Fonts,
+	FontFamily,
+	SizeFont,
+	Choose,
 } from '../styles/Home';
 
 const Home: React.FC = () => {
@@ -53,8 +60,6 @@ const Home: React.FC = () => {
 	const [FontSizeActive, setFontSizeActive] = useState(false);
 
 	const [FontColorActive, setFontColorActive] = useState(false);
-	const [ColorValue, setColorValue] = useState('');
-	const [ColorBorder, setColorBorder] = useState('');
 
 	const [ImageActive, setImageActive] = useState(false);
 	const [ImageLink, setImageLink] = useState('');
@@ -70,24 +75,13 @@ const Home: React.FC = () => {
 	const [HrefLink, setHrefLink] = useState('');
 	const [LabelLink, setLabelLink] = useState('');
 
-	const [Cores] = useState([
-		'#000000',
-		'#1E90FF',
-		'#008000',
-		'#00CED1',
-		'#FFA500',
-		'#FF0000',
-		'#FFFF00',
-		'#006400',
-		'#ADD8E6',
-		'#4682B4',
-		'#7B68EE',
-		'#9400D3',
-	]);
+	const [Cores] = useState(CoresOptions);
+	const [OptionsFonts] = useState(FontsOptions);
+	const [OptionsSize] = useState(FontSizeOptions);
+	const [FontValue, setFontValue] = useState('Roboto');
+	const [FontSizeValue, setFontSizeValue] = useState('3');
 
 	var iframeDocument: Document;
-
-	useEffect(() => {}, []);
 
 	useEffect(() => {
 		// @ts-ignore
@@ -96,7 +90,34 @@ const Home: React.FC = () => {
 		iframeDocument.body.style.margin = '10px 20px';
 		iframeDocument.designMode = 'on';
 
-		document.addEventListener('keydown', () => {});
+		ActionsEditor.addKeyboardShortcuts(
+			document,
+			[
+				BoldActive,
+				ItalicActive,
+				UnderlineActive,
+				StrikeActive,
+				OrdenedActive,
+				NoOrdenedActive,
+				LeftActive,
+				CenterActive,
+				RightActive,
+				FullActive,
+			],
+			[
+				setBoldActive,
+				setItalicActive,
+				setUnderlineActive,
+				setStrikeActive,
+				setOrdenedActive,
+				setNoOrdenedActive,
+				setLeftActive,
+				setCenterActive,
+				setRightActive,
+				setFullActive,
+			],
+			iframeDocument
+		);
 	});
 
 	return (
@@ -106,31 +127,35 @@ const Home: React.FC = () => {
 					<EditorActions>
 						<Separator>
 							<Action
-								className={BoldActive ? 'active' : ''}
+								className={BoldActive ? 'active action' : 'action'}
 								onClick={() => ActionsEditor.TextBold(iframeDocument, BoldActive, setBoldActive)}
+								title="Negrito (Ctrl + B)"
 							>
 								<Bold size={22.5} />
 							</Action>
 
 							<Action
-								className={ItalicActive ? 'active' : ''}
+								className={ItalicActive ? 'active action' : 'action'}
 								onClick={() => ActionsEditor.TextItalic(iframeDocument, ItalicActive, setItalicActive)}
+								title="Italic (Ctrl + I)"
 							>
 								<Italic size={22.5} />
 							</Action>
 
 							<Action
-								className={UnderlineActive ? 'active' : ''}
+								className={UnderlineActive ? 'active action' : 'action'}
 								onClick={() =>
 									ActionsEditor.TextUnderline(iframeDocument, UnderlineActive, setUnderlineActive)
 								}
+								title="Underline (Ctrl + u)"
 							>
 								<Underline size={22.5} />
 							</Action>
 
 							<Action
-								className={StrikeActive ? 'active' : ''}
+								className={StrikeActive ? 'active action' : 'action'}
 								onClick={() => ActionsEditor.TextStrike(iframeDocument, StrikeActive, setStrikeActive)}
+								title="Tachado (Ctrl + D)"
 							>
 								<StrikeThroungh size={22.5} />
 							</Action>
@@ -148,6 +173,7 @@ const Home: React.FC = () => {
 										setNoOrdenedActive
 									);
 								}}
+								title="Lista não ordenada (Ctrl + L)"
 							>
 								<NoOrdened size={22.5} />
 							</Action>
@@ -159,6 +185,7 @@ const Home: React.FC = () => {
 
 									ActionsEditor.InsertListOrdenada(iframeDocument, OrdenedActive, setOrdenedActive);
 								}}
+								title="Lista ordenada (Ctrl + O)"
 							>
 								<Ordened size={22.5} />
 							</Action>
@@ -174,6 +201,7 @@ const Home: React.FC = () => {
 
 									ActionsEditor.InsertCursorLeft(iframeDocument, LeftActive, setLeftActive);
 								}}
+								title="Alinha a esquerda (Ctrl + K)"
 							>
 								<AlignLeft size={22.5} />
 							</Action>
@@ -187,6 +215,7 @@ const Home: React.FC = () => {
 
 									ActionsEditor.InsertCursorCenter(iframeDocument, CenterActive, setCenterActive);
 								}}
+								title="Alinha ao centro (Ctrl + N)"
 							>
 								<AlignCenter size={22.5} />
 							</Action>
@@ -200,6 +229,7 @@ const Home: React.FC = () => {
 
 									ActionsEditor.InsertCursorRight(iframeDocument, RightActive, setRightActive);
 								}}
+								title="Alinha a direita (Ctrl + M)"
 							>
 								<AlignRight size={22.5} />
 							</Action>
@@ -213,21 +243,34 @@ const Home: React.FC = () => {
 
 									ActionsEditor.InsertCursorFull(iframeDocument, FullActive, setFullActive);
 								}}
+								title="Alinha ao inteiro (Ctrl + F)"
 							>
 								<AlignFull size={22.5} />
 							</Action>
 						</Separator>
 
 						<Separator>
-							<Action className={LinkActive ? 'active' : ''} onClick={() => setLinkActive(true)}>
+							<Action
+								className={LinkActive ? 'active' : ''}
+								onClick={() => setLinkActive(true)}
+								title="Link"
+							>
 								<Link size={22.5} />
 							</Action>
 
-							<Action className={YoutubeActive ? 'active' : ''} onClick={() => setYoutubeActive(true)}>
+							<Action
+								className={YoutubeActive ? 'active' : ''}
+								onClick={() => setYoutubeActive(true)}
+								title="Video"
+							>
 								<Youtube size={22.5} />
 							</Action>
 
-							<Action className={ImageActive ? 'active' : ''} onClick={() => setImageActive(true)}>
+							<Action
+								className={ImageActive ? 'active' : ''}
+								onClick={() => setImageActive(true)}
+								title="Image"
+							>
 								<Image size={19} />
 							</Action>
 						</Separator>
@@ -235,7 +278,13 @@ const Home: React.FC = () => {
 						<Separator>
 							<Action
 								className={FontColorActive ? 'active' : ''}
-								onClick={() => setFontColorActive(!FontColorActive)}
+								onClick={() => {
+									FontSizeActive && setFontSizeActive(false);
+									FontActive && setFontActive(false);
+
+									setFontColorActive(!FontColorActive);
+								}}
+								title="Color da fonte"
 							>
 								<FontColor size={22.5} />
 
@@ -247,17 +296,14 @@ const Home: React.FC = () => {
 											{Cores.map(item => (
 												<Color
 													cor={item}
-													onClick={() => {
-														setColorValue(item);
-														setColorBorder(item);
-
+													onClick={() =>
 														ActionsEditor.ChangeColor(
 															iframeDocument,
 															FontColorActive,
 															setFontColorActive,
 															item
-														);
-													}}
+														)
+													}
 												/>
 											))}
 										</GridColors>
@@ -265,15 +311,83 @@ const Home: React.FC = () => {
 								)}
 							</Action>
 
-							<Action className={FontActive ? 'active' : ''} onClick={() => setFontActive(!FontActive)}>
+							<Action
+								className={FontActive ? 'active' : ''}
+								onClick={() => {
+									FontColorActive && setFontColorActive(false);
+									FontSizeActive && setFontSizeActive(false);
+
+									setFontActive(!FontActive);
+								}}
+								title="Mudar fonte"
+							>
 								<Font size={22.5} />
+
+								{FontActive && (
+									<ChooseFonts>
+										<Indicador />
+
+										<Fonts>
+											{OptionsFonts.map(item => {
+												return (
+													<Choose
+														className={item.family == FontValue ? 'active' : ''}
+														onClick={() => {
+															setFontValue(item.family);
+
+															ActionsEditor.ChangeFont(
+																iframeDocument,
+																FontActive,
+																setFontActive,
+																item.family
+															);
+														}}
+													>
+														<FontFamily style={{ fontFamily: item.family }}>
+															{item.family}
+														</FontFamily>
+													</Choose>
+												);
+											})}
+										</Fonts>
+									</ChooseFonts>
+								)}
 							</Action>
 
 							<Action
 								className={FontSizeActive ? 'active' : ''}
 								onClick={() => setFontSizeActive(!FontSizeActive)}
+								title="Tamanho da fonte"
 							>
 								<FontSize size={22.5} />
+
+								{FontSizeActive && (
+									<ChooseFonts className="size">
+										<Indicador />
+
+										<Fonts className="size">
+											{OptionsSize.map(item => {
+												return (
+													<Choose
+														className={item.size == FontSizeValue ? 'active' : ''}
+														onClick={() => {
+															setFontSizeValue(item.size);
+
+															ActionsEditor.ChangeFontSize(
+																iframeDocument,
+																FontSizeActive,
+																setFontSizeActive,
+																item.size
+															);
+														}}
+													>
+														<SizeFont>{item.label}</SizeFont>
+													</Choose>
+												);
+											})}
+										</Fonts>
+									</ChooseFonts>
+								)}
 							</Action>
 						</Separator>
 					</EditorActions>
