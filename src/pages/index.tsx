@@ -81,6 +81,8 @@ const Home: React.FC = () => {
 	const [FontValue, setFontValue] = useState('Roboto');
 	const [FontSizeValue, setFontSizeValue] = useState('3');
 
+	const [ShortCuts, setShortCuts] = useState(false);
+
 	var iframeDocument: Document;
 
 	useEffect(() => {
@@ -89,9 +91,10 @@ const Home: React.FC = () => {
 
 		iframeDocument.body.style.margin = '10px 20px';
 		iframeDocument.designMode = 'on';
+	});
 
+	useEffect(() => {
 		ActionsEditor.addKeyboardShortcuts(
-			document,
 			[
 				BoldActive,
 				ItalicActive,
@@ -118,7 +121,7 @@ const Home: React.FC = () => {
 			],
 			iframeDocument
 		);
-	});
+	}, []);
 
 	return (
 		<>
@@ -127,7 +130,7 @@ const Home: React.FC = () => {
 					<EditorActions>
 						<Separator>
 							<Action
-								className={BoldActive ? 'active action' : 'action'}
+								className={BoldActive ? 'active' : ''}
 								onClick={() => ActionsEditor.TextBold(iframeDocument, BoldActive, setBoldActive)}
 								title="Negrito (Ctrl + B)"
 							>
@@ -135,7 +138,7 @@ const Home: React.FC = () => {
 							</Action>
 
 							<Action
-								className={ItalicActive ? 'active action' : 'action'}
+								className={ItalicActive ? 'active' : ''}
 								onClick={() => ActionsEditor.TextItalic(iframeDocument, ItalicActive, setItalicActive)}
 								title="Italic (Ctrl + I)"
 							>
@@ -143,17 +146,17 @@ const Home: React.FC = () => {
 							</Action>
 
 							<Action
-								className={UnderlineActive ? 'active action' : 'action'}
+								className={UnderlineActive ? 'active' : ''}
 								onClick={() =>
 									ActionsEditor.TextUnderline(iframeDocument, UnderlineActive, setUnderlineActive)
 								}
-								title="Underline (Ctrl + u)"
+								title={'Underline (Ctrl + U)'}
 							>
 								<Underline size={22.5} />
 							</Action>
 
 							<Action
-								className={StrikeActive ? 'active action' : 'action'}
+								className={StrikeActive ? 'active' : ''}
 								onClick={() => ActionsEditor.TextStrike(iframeDocument, StrikeActive, setStrikeActive)}
 								title="Tachado (Ctrl + D)"
 							>
@@ -194,13 +197,13 @@ const Home: React.FC = () => {
 						<Separator>
 							<Action
 								className={LeftActive ? 'active' : ''}
-								onClick={() => {
-									CenterActive && setCenterActive(false);
-									RightActive && setRightActive(false);
-									FullActive && setFullActive(false);
-
-									ActionsEditor.InsertCursorLeft(iframeDocument, LeftActive, setLeftActive);
-								}}
+								onClick={() =>
+									ActionsEditor.InsertCursorLeft(
+										iframeDocument,
+										[LeftActive, CenterActive, RightActive, FullActive],
+										[setLeftActive, setCenterActive, setRightActive, setFullActive]
+									)
+								}
 								title="Alinha a esquerda (Ctrl + K)"
 							>
 								<AlignLeft size={22.5} />
@@ -208,13 +211,13 @@ const Home: React.FC = () => {
 
 							<Action
 								className={CenterActive ? 'active' : ''}
-								onClick={() => {
-									LeftActive && setLeftActive(false);
-									RightActive && setRightActive(false);
-									FullActive && setFullActive(false);
-
-									ActionsEditor.InsertCursorCenter(iframeDocument, CenterActive, setCenterActive);
-								}}
+								onClick={() =>
+									ActionsEditor.InsertCursorCenter(
+										iframeDocument,
+										[LeftActive, CenterActive, RightActive, FullActive],
+										[setLeftActive, setCenterActive, setRightActive, setFullActive]
+									)
+								}
 								title="Alinha ao centro (Ctrl + N)"
 							>
 								<AlignCenter size={22.5} />
@@ -222,13 +225,13 @@ const Home: React.FC = () => {
 
 							<Action
 								className={RightActive ? 'active' : ''}
-								onClick={() => {
-									LeftActive && setLeftActive(false);
-									CenterActive && setCenterActive(false);
-									FullActive && setFullActive(false);
-
-									ActionsEditor.InsertCursorRight(iframeDocument, RightActive, setRightActive);
-								}}
+								onClick={() =>
+									ActionsEditor.InsertCursorRight(
+										iframeDocument,
+										[LeftActive, CenterActive, RightActive, FullActive],
+										[setLeftActive, setCenterActive, setRightActive, setFullActive]
+									)
+								}
 								title="Alinha a direita (Ctrl + M)"
 							>
 								<AlignRight size={22.5} />
@@ -236,13 +239,13 @@ const Home: React.FC = () => {
 
 							<Action
 								className={FullActive ? 'active' : ''}
-								onClick={() => {
-									LeftActive && setLeftActive(false);
-									CenterActive && setCenterActive(false);
-									RightActive && setRightActive(false);
-
-									ActionsEditor.InsertCursorFull(iframeDocument, FullActive, setFullActive);
-								}}
+								onClick={() =>
+									ActionsEditor.InsertCursorFull(
+										iframeDocument,
+										[LeftActive, CenterActive, RightActive, FullActive],
+										[setLeftActive, setCenterActive, setRightActive, setFullActive]
+									)
+								}
 								title="Alinha ao inteiro (Ctrl + F)"
 							>
 								<AlignFull size={22.5} />
